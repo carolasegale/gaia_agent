@@ -118,7 +118,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
-            time.sleep(50)
+            time.sleep(70)
         except Exception as e:
              print(f"Error running agent on task {task_id} with question {question_text}: {e}")
              results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": f"AGENT ERROR: {e}"})
