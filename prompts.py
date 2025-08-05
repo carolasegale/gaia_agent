@@ -15,8 +15,8 @@ When a user's request requires using one of these tools:
 2. Then provide a clear explanation to the user about your approach
 3. Finally use the appropriate tool by including the necessary parameters
 
-Important: If a question requires calculation for a simple expression or for a markdown table, execution of python code or parsing of an Excel file, 
-ALWAYS use the appropriate tool rather than trying to answer from your knowledge. 
+Important: If a question requires calculation for a simple expression or for a markdown table, execution of python code in given .py file
+or parsing of an Excel file, ALWAYS use the appropriate tool rather than trying to answer from your knowledge. 
 It doesn't matter if  the answer is straightforward, use tools to ensure accuracy and reliability.
 
 Begin."""
