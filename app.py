@@ -7,6 +7,8 @@ import pandas as pd
 # (Keep Constants as is)
 # --- Constants ---
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
+TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
 # --- Basic Agent Definition ---
 # ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
