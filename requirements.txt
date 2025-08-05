@@ -1,2 +1,10 @@
 gradio
 requests
+numpy
+pandas
+llama-index
+llama-index-llms-google-genai
+llama-index-tools-wikipedia
+llama-index-tools-tavily-research
+tabulate
+openai-whisper
