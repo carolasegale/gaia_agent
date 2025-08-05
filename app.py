@@ -42,7 +42,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
         llm = GoogleGenAI(
-            model="models/gemini-2.5-flash-lite", #gemini-2.5-flash-lite, gemini-2.0-flash-lite
+            model="models/gemini-2.0-flash-lite", #gemini-2.5-flash-lite, gemini-2.0-flash-lite
             api_key=GOOGLE_API_KEY
         )
     except Exception as e:
