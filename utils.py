@@ -5,7 +5,7 @@ def download_file(task_id, file_name):
     response = requests.get(url)
 
     # Save the file
-    with open('/content/'+file_name, "wb") as f:
+    with open('content/'+file_name, "wb") as f:
         f.write(response.content)
 
     print("Downloaded:", file_name)

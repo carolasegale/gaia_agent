@@ -2,9 +2,8 @@ from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent
 import whisper
 
 class GAIA_Agent:
-    def __init__(self, llm, file_name, tavily_api_key):
+    def __init__(self, llm, tavily_api_key):
         self.llm = llm
-        self.file_name = file_name
         self.tavily_api_key = tavily_api_key
         
         # Setup tools
@@ -14,14 +13,6 @@ class GAIA_Agent:
         # Setup agents
         self._setup_agents()
 
-        # Create AgentWorkflow
-        self.workflow = AgentWorkflow(
-            agents=[self.multi_agent, self.wiki_agent, self.search_agent],
-            root_agent="multi_functional_agent",
-            initial_state={
-                'file_path': f'/content/{self.file_name}',
-            }
-        )
 
     def _setup_tools(self):
         from llama_index.core.tools import FunctionTool
@@ -105,5 +96,14 @@ class GAIA_Agent:
             can_handoff_to=['multi_functional_agent', 'wiki_agent']
         )
 
-    def run(self, input, memory=None):
-        return self.workflow.run(user_msg=input, memory=memory)
+    # Create AgentWorkflow
+    def build_workflow(self, file_name_dict):
+        return AgentWorkflow(
+            agents=[self.multi_agent, self.wiki_agent, self.search_agent],
+            root_agent="multi_functional_agent",
+            initial_state=file_name_dict  # equal to {'file_path': file_name} or {}
+        )
+
+    def get_answer(self, input, file_name_dict, memory=None):
+        workflow = self.build_workflow(file_name_dict)
+        return workflow.run(user_msg=input, memory=memory)
