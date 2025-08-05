@@ -106,4 +106,4 @@ class GAIA_Agent:
 
     async def get_answer(self, input, file_name_dict, memory=None):
         workflow = self.build_workflow(file_name_dict)
-        return workflow.run(user_msg=input, memory=memory)
+        return await workflow.run(user_msg=input, memory=memory)
