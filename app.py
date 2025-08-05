@@ -6,6 +6,7 @@ import pandas as pd
 from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
 from utils import download_file
+from prompts import user_prompt_with_question
 from llama_index.core.memory import Memory
 import time
 
@@ -117,7 +118,8 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             memory = Memory.from_defaults(
                 token_limit=80000  # Normally you would set this to be closer to the LLM context window (i.e. 75,000, etc.)
             )
-            agent_answer = await agent.get_answer(question_text, file_name_dict, memory)
+            prompt = user_prompt_with_question(question_text)
+            agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
             submitted_answer = agent_answer.response.blocks[0].text
             print(question_text, '', submitted_answer)
             # ----------------------------------------------------------------------------------------------------------------
