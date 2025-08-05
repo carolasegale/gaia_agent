@@ -42,7 +42,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
         llm = GoogleGenAI(
-            model="models/gemini-2.5-flash-lite", #gemini-2.5-flash-lite, gemini-2.0-flash-lite
+            model="models/gemini-2.0-flash-lite", #gemini-2.5-flash-lite, gemini-2.0-flash-lite
             api_key=GOOGLE_API_KEY
         )
     except Exception as e:
@@ -107,11 +107,11 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             
             # RUN AGENT
             memory = Memory.from_defaults(
-                token_limit=80000  # Normally you would set this to be closer to the LLM context window (i.e. 75,000, etc.)
+                token_limit=60000  # 80000
             )
             prompt = user_prompt_with_question(question_text)
-            #agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
-            agent_answer = await agent.get_answer_with_stream(prompt, file_name_dict, memory)
+            agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
+            #agent_answer = await agent.get_answer_with_stream(prompt, file_name_dict, memory)
             submitted_answer = agent_answer.response.blocks[0].text
             print(question_text, '', submitted_answer)
             # ----------------------------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ class GAIA_Agent:
         self.calculator_tool = FunctionTool.from_defaults(
             fn=calculate,
             name="calculator",
-            description="A calculator that performs basic arithmetic operations."
+            description="A calculator that performs basic arithmetic operations (can be used also with basic expressions extrapolated from markdown tables)."
         )
 
         '''
