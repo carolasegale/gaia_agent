@@ -11,6 +11,8 @@ from llama_index.core.memory import Memory
 import time
 import sys
 from tools import run_python_file
+import contextlib
+import io
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -19,8 +21,25 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
 file_path = 'content/f918266a-b3e0-4914-865d-4faa564f1aef.py' 
-output = run_python_file(file_path)
-print(f"Output of running {file_path}: {output}")
+#output = run_python_file(file_path)
+#print(f"Output of running {file_path}: {output}")
+python_code = open(file_path).read()
+print(python_code)
+
+# Create a buffer to capture stdout
+print('buffer')
+buffer = io.StringIO()
+
+# Redirect stdout to the buffer
+print('execution')
+with contextlib.redirect_stdout(buffer):
+    exec(python_code)
+
+# Get everything that was printed in the script
+output = buffer.getvalue()
+print(output)
+last_output = output.split('\n')[-2]
+print(last_output)
 
 sys.exit("fine check")
 '''
