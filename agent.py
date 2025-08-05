@@ -104,6 +104,6 @@ class GAIA_Agent:
             initial_state=file_name_dict  # equal to {'file_path': file_name} or {}
         )
 
-    def get_answer(self, input, file_name_dict, memory=None):
+    async def get_answer(self, input, file_name_dict, memory=None):
         workflow = self.build_workflow(file_name_dict)
         return workflow.run(user_msg=input, memory=memory)
