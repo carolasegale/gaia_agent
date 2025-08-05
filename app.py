@@ -3,6 +3,10 @@ import gradio as gr
 import requests
 import inspect
 import pandas as pd
+from agent import GAIA_Agent
+from llama_index.llms.google_genai import GoogleGenAI
+from utils import download_file
+from llama_index.core.memory import Memory
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -10,6 +14,7 @@ DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
+'''
 # --- Basic Agent Definition ---
 # ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
 class BasicAgent:
@@ -20,6 +25,7 @@ class BasicAgent:
         fixed_answer = "This is a default answer."
         print(f"Agent returning fixed answer: {fixed_answer}")
         return fixed_answer
+'''
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
@@ -42,7 +48,17 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
 
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
-        agent = BasicAgent()
+        llm = GoogleGenAI(
+            model="models/gemini-2.0-flash-lite",
+            api_key=GOOGLE_API_KEY
+        )
+    except Exception as e::
+        print(f"Error instantiating LLM: {e}")
+        return f"Error initializing LLM: {e}", None
+    
+    try:
+        # DEFINE AGENT HERE
+        agent = GAIA_Agent(llm=llm, tavily_api_key=TVLY_TOKEN)
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
@@ -82,8 +98,26 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             print(f"Skipping item with missing task_id or question: {item}")
             continue
         try:
+            # ----------------------------------------------------------------------------------------------------------------
+            # DOWNLOAD ATTACHED FILE IF PRESENT
             file_name = item.get("file_name")
-            submitted_answer = agent(question_text, file_name)
+            file_name = file_name if file_name != "" else None
+            if file_name != None:
+                # If there is a file to parse I must add it to the workflow agent
+                if file_name not in os.listdir("/content/"):
+                    # If the file was previously downloaded in the content/ folder I do not need to download it again
+                    download_file(task_id, file_name)
+                file_name_dict = {'file_path': '/content/'+file_name}
+            else: # If there is not attached file
+                file_name_dict = {}
+            
+            # RUN AGENT
+            memory = Memory.from_defaults(
+                token_limit=80000  # Normally you would set this to be closer to the LLM context window (i.e. 75,000, etc.)
+            )
+            submitted_answer = await agent.get_answer(question_text, file_name_dict, memory)
+            # ----------------------------------------------------------------------------------------------------------------
+            
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
         except Exception as e:
