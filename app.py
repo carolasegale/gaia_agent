@@ -117,7 +117,8 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             memory = Memory.from_defaults(
                 token_limit=80000  # Normally you would set this to be closer to the LLM context window (i.e. 75,000, etc.)
             )
-            submitted_answer = await agent.get_answer(question_text, file_name_dict, memory).response.blocks[0].text
+            agent_answer = await agent.get_answer(question_text, file_name_dict, memory)
+            submitted_answer = agent_answer.response.blocks[0].text
             print(question_text, '', submitted_answer)
             # ----------------------------------------------------------------------------------------------------------------
             
