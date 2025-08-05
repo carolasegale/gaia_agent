@@ -52,7 +52,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             model="models/gemini-2.0-flash-lite",
             api_key=GOOGLE_API_KEY
         )
-    except Exception as e::
+    except Exception as e:
         print(f"Error instantiating LLM: {e}")
         return f"Error initializing LLM: {e}", None
     
