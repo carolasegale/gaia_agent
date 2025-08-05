@@ -106,4 +106,4 @@ class GAIA_Agent:
 
     def get_answer(self, input, file_name_dict, memory=None):
         workflow = self.build_workflow(file_name_dict)
-        return workflow.run(user_msg=input, memory=memory)
+        return workflow.run(user_msg=input, memory=memory, max_iterations=20)
