@@ -21,10 +21,10 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
 file_path = 'content/f918266a-b3e0-4914-865d-4faa564f1aef.py' 
-#output = run_python_file(file_path)
-#print(f"Output of running {file_path}: {output}")
+output = run_python_file(file_path)
+print(f"Output of running {file_path}: {output}")
+'''
 python_code = open(file_path).read()
-print(python_code)
 
 # Create a buffer to capture stdout
 print('buffer')
@@ -39,22 +39,11 @@ with contextlib.redirect_stdout(buffer):
 output = buffer.getvalue()
 print(output)
 last_output = output.split('\n')[-2]
-print(last_output)
+print(last_output)'''
 
 sys.exit("fine check")
-'''
-# --- Basic Agent Definition ---
-# ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
-class BasicAgent:
-    def __init__(self):
-        print("BasicAgent initialized.")
-    def __call__(self, question: str, file: str) -> str:
-        print(f"Agent received question (first 50 chars): {question[:50]}...")
-        fixed_answer = "This is a default answer."
-        print(f"Agent returning fixed answer: {fixed_answer}")
-        return fixed_answer
-'''
 
+# --- Function to run and submit all answers ---
 async def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
     Fetches all questions, runs the BasicAgent on them, submits all answers,

@@ -75,9 +75,11 @@ def run_python_file(file_path: str) -> dict:
         python_code = open(file_path).read()
 
         # Create a buffer to capture stdout
+        print('buffer')
         buffer = io.StringIO()
 
         # Redirect stdout to the buffer
+        print('execution')
         with contextlib.redirect_stdout(buffer):
             exec(python_code)
 
@@ -85,6 +87,7 @@ def run_python_file(file_path: str) -> dict:
         output = buffer.getvalue()
         print(output)
         last_output = output.split('\n')[-2]
+        print(last_output)
 
         if 'error' in output.lower():
             return {'error': f"Error running script:\n{output}"}
