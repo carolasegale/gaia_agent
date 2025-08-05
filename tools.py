@@ -66,24 +66,7 @@ def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
 def run_python_file(file_path: str) -> dict:
     """Safely runs a Python script and returns its final printed numeric output."""
 
-    try:
-        '''
-        python_code = open(file_path).read()
-
-        # Create a buffer to capture stdout
-        buffer = io.StringIO()
-
-        # Redirect stdout to the buffer
-        with contextlib.redirect_stdout(buffer):
-            exec(python_code)
-
-        # Get everything that was printed in the script
-        output = buffer.getvalue()
-        last_output = output.split('\n')[-2]
-
-        if 'error' in output.lower():
-            return {'error': f"Error running script:\n{output}"}
-        '''
+    try:        
         result = subprocess.run(
             ["python", file_path],
             capture_output=True,
@@ -97,7 +80,7 @@ def run_python_file(file_path: str) -> dict:
 
         last_output = output.split('\n')[-1]
 
-        return {'result': f" Whole output: '{output}'. Final numeric output: {last_output}"}
+        return {'result': f"Whole output of python code in {file_path}: '{output}'. Final numeric output: {last_output}"}
 
     except Exception as e:
         return {'error': f"Execution failed: {str(e)}"}
