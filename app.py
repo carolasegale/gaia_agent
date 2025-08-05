@@ -3,16 +3,18 @@ import gradio as gr
 import requests
 import inspect
 import pandas as pd
+import numpy as np
 from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
-from utils import download_file
-from prompts import user_prompt_with_question
 from llama_index.core.memory import Memory
+from llama_index.core import Document
+from utils import download_file
+import whisper
+from prompts import user_prompt_with_question
 import time
+
 import sys
 from tools import run_python_file
-import contextlib
-import io
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -23,23 +25,6 @@ TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 file_path = 'content/f918266a-b3e0-4914-865d-4faa564f1aef.py' 
 output = run_python_file(file_path)
 print(f"Output of running {file_path}: {output}")
-'''
-python_code = open(file_path).read()
-
-# Create a buffer to capture stdout
-print('buffer')
-buffer = io.StringIO()
-
-# Redirect stdout to the buffer
-print('execution')
-with contextlib.redirect_stdout(buffer):
-    exec(python_code)
-
-# Get everything that was printed in the script
-output = buffer.getvalue()
-print(output)
-last_output = output.split('\n')[-2]
-print(last_output)'''
 
 sys.exit("fine check")
 

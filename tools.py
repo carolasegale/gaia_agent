@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
-import json
-import random
-import os
 import numpy as np
 #from youtube_transcript_api import YouTubeTranscriptApi
 from llama_index.core import Document
 import whisper
-import io
-import contextlib
 
 
 # calculator tool
@@ -72,6 +67,7 @@ def run_python_file(file_path: str) -> dict:
     """Safely runs a Python script and returns its final printed numeric output."""
     import io
     import contextlib
+    import sys
 
     try:
         python_code = open(file_path).read()
@@ -82,7 +78,8 @@ def run_python_file(file_path: str) -> dict:
         # Redirect stdout to the buffer
         print('execution')
         with contextlib.redirect_stdout(buffer):
-            exec(python_code)#, globals(), locals())
+            exec(python_code, globals(), locals())
+            sys.stdout.flush()
 
         print('execution done')
         print(buffer)
