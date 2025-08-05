@@ -92,7 +92,9 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
     results_log = []
     answers_payload = []
     print(f"Running agent on {len(questions_data)} questions...")
+    i = 1
     for item in questions_data:
+        print(f'Working on question {i}')
         task_id = item.get("task_id")
         question_text = item.get("question")
         if not task_id or question_text is None:
@@ -121,6 +123,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
+            i =+ 1
             time.sleep(40)
         except Exception as e:
              print(f"Error running agent on task {task_id}: {e}")
