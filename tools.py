@@ -73,7 +73,6 @@ def run_python_file(file_path: str) -> dict:
 
     try:
         python_code = open(file_path).read()
-        print(python_code)
 
         # Create a buffer to capture stdout
         buffer = io.StringIO()
@@ -84,6 +83,7 @@ def run_python_file(file_path: str) -> dict:
 
         # Get everything that was printed in the script
         output = buffer.getvalue()
+        print(output)
         last_output = output.split('\n')[-2]
 
         if 'error' in output.lower():
