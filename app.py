@@ -8,17 +8,12 @@ from llama_index.llms.google_genai import GoogleGenAI
 from utils import download_file
 from llama_index.core.memory import Memory
 import time
-import sys
 
 # (Keep Constants as is)
 # --- Constants ---
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
-
-print(os.listdir())
-print(os.listdir('content/'))
-sys.exit("Error message")
 
 '''
 # --- Basic Agent Definition ---
@@ -109,8 +104,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             # ----------------------------------------------------------------------------------------------------------------
             # DOWNLOAD ATTACHED FILE IF PRESENT
             file_name = item.get("file_name")
-            file_name = file_name if file_name != "" else None
-            if file_name != None:
+            if file_name != "":
                 # If there is a file to parse I must add it to the workflow agent
                 if file_name not in os.listdir("content/"):
                     # If the file was previously downloaded in the content/ folder I do not need to download it again
