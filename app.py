@@ -4,12 +4,12 @@ import requests
 import inspect
 import pandas as pd
 import numpy as np
+
 from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.core.memory import Memory
 from llama_index.core import Document
 from utils import download_file
-import whisper
 from prompts import user_prompt_with_question
 import time
 

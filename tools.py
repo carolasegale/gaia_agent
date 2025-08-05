@@ -5,7 +5,7 @@ import numpy as np
 #from youtube_transcript_api import YouTubeTranscriptApi
 from llama_index.core import Document
 import whisper
-
+import subprocess
 
 # calculator tool
 def calculate(input: dict) -> dict:
@@ -65,32 +65,37 @@ def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
 # python file execution tool
 def run_python_file(file_path: str) -> dict:
     """Safely runs a Python script and returns its final printed numeric output."""
-    import io
-    import contextlib
-    import sys
 
     try:
+        '''
         python_code = open(file_path).read()
 
         # Create a buffer to capture stdout
         buffer = io.StringIO()
 
         # Redirect stdout to the buffer
-        print('execution')
         with contextlib.redirect_stdout(buffer):
-            exec(python_code, globals(), locals())
-            sys.stdout.flush()
+            exec(python_code)
 
-        print('execution done')
-        print(buffer)
         # Get everything that was printed in the script
         output = buffer.getvalue()
-        print(output)
         last_output = output.split('\n')[-2]
-        print(last_output)
 
         if 'error' in output.lower():
             return {'error': f"Error running script:\n{output}"}
+        '''
+        result = subprocess.run(
+            ["python", file_path],
+            capture_output=True,
+            text=True
+        )
+        output = result.stdout.strip()
+        error = result.stderr.strip()
+
+        if result.returncode != 0:# or 'error' in output.lower():
+            return {'error': f"Script error:\n{error}"}
+
+        last_output = output.split('\n')[-1]
 
         return {'result': f" Whole output: '{output}'. Final numeric output: {last_output}"}
 
