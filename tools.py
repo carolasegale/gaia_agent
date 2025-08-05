@@ -83,6 +83,8 @@ def run_python_file(file_path: str) -> dict:
         with contextlib.redirect_stdout(buffer):
             exec(python_code)
 
+        print('execution done')
+        print(buffer)
         # Get everything that was printed in the script
         output = buffer.getvalue()
         print(output)
