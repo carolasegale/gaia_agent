@@ -9,6 +9,8 @@ from utils import download_file
 from prompts import user_prompt_with_question
 from llama_index.core.memory import Memory
 import time
+import sys
+from tools import run_python_file
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -16,6 +18,11 @@ DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
+file_path = 'content/f918266a-b3e0-4914-865d-4faa564f1aef.py' 
+output = run_python_file(file_path)
+print(f"Output of running {file_path}: {output}")
+
+sys.exit("fine check")
 '''
 # --- Basic Agent Definition ---
 # ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
@@ -51,7 +58,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
         llm = GoogleGenAI(
-            model="models/gemini-2.0-flash-lite",
+            model="models/gemini-2.5-flash-lite", #gemini-2.5-flash-lite, gemini-2.0-flash-lite
             api_key=GOOGLE_API_KEY
         )
     except Exception as e:

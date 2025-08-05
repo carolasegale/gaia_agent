@@ -73,6 +73,7 @@ def run_python_file(file_path: str) -> dict:
 
     try:
         python_code = open(file_path).read()
+        print(python_code)
 
         # Create a buffer to capture stdout
         buffer = io.StringIO()
