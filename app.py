@@ -7,6 +7,7 @@ from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
 from utils import download_file
 from llama_index.core.memory import Memory
+import time
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -120,6 +121,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
+            time.sleep(40)
         except Exception as e:
              print(f"Error running agent on task {task_id}: {e}")
              results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": f"AGENT ERROR: {e}"})
