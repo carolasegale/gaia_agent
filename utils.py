@@ -7,7 +7,7 @@ def download_file(task_id, file_name):
 
     # Save the file
     path = os.path.join("content", file_name)
-    with open('path, "wb") as f:
+    with open(path, "wb") as f:
         f.write(response.content)
 
     print("Downloaded:", file_name)
