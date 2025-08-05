@@ -70,18 +70,19 @@ def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
 # python file execution tool
 def run_python_file(file_path: str) -> dict:
     """Safely runs a Python script and returns its final printed numeric output."""
+    import io
+    import contextlib
 
     try:
         python_code = open(file_path).read()
 
         # Create a buffer to capture stdout
-        print('buffer')
         buffer = io.StringIO()
 
         # Redirect stdout to the buffer
         print('execution')
         with contextlib.redirect_stdout(buffer):
-            exec(python_code)
+            exec(python_code)#, globals(), locals())
 
         print('execution done')
         print(buffer)
