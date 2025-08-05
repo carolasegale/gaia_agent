@@ -7,7 +7,7 @@ from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
 from utils import download_file
 from llama_index.core.memory import Memory
-import time
+import timeimport sys
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -17,8 +17,7 @@ TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
 print(os.listdir())
 print(os.listdir('content/'))
-break
-
+sys.exit("Error message")
 
 '''
 # --- Basic Agent Definition ---
