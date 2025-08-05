@@ -106,4 +106,20 @@ class GAIA_Agent:
 
     def get_answer(self, input, file_name_dict, memory=None):
         workflow = self.build_workflow(file_name_dict)
-        return workflow.run(user_msg=input, memory=memory, max_iterations=20)
+        return workflow.run(user_msg=input, memory=memory)
+    
+    def get_answer_with_stream(self, input, file_name_dict, memory=None):
+        workflow = self.build_workflow(file_name_dict)
+
+        async def main():
+            handler = workflow.run(user_msg=input, memory=memory)
+
+            # così vedo come ragiona il LLM
+            async for event in handler.stream_events():
+                if hasattr(event, "delta"):
+                    print(event.delta, end="", flush=True)
+
+            result = await handler
+            return result
+
+        return main()
