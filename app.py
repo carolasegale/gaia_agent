@@ -15,6 +15,11 @@ DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")  # to use gemini
 TVLY_TOKEN = os.getenv("TVLY_TOKEN")  # to use tavily web search
 
+print(os.listdir())
+print(os.listdir('content/'))
+break
+
+
 '''
 # --- Basic Agent Definition ---
 # ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
@@ -28,7 +33,7 @@ class BasicAgent:
         return fixed_answer
 '''
 
-def run_and_submit_all( profile: gr.OAuthProfile | None):
+async def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
     Fetches all questions, runs the BasicAgent on them, submits all answers,
     and displays the results.
@@ -118,16 +123,16 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             memory = Memory.from_defaults(
                 token_limit=80000  # Normally you would set this to be closer to the LLM context window (i.e. 75,000, etc.)
             )
-            submitted_answer = agent.get_answer(question_text, file_name_dict, memory)
+            submitted_answer = await agent.get_answer(question_text, file_name_dict, memory)
             # ----------------------------------------------------------------------------------------------------------------
             
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
-            i =+ 1
-            time.sleep(40)
+            time.sleep(50)
         except Exception as e:
              print(f"Error running agent on task {task_id}: {e}")
              results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": f"AGENT ERROR: {e}"})
+        i =+ 1
 
     if not answers_payload:
         print("Agent did not produce any answers to submit.")
