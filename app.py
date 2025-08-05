@@ -104,10 +104,10 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             file_name = file_name if file_name != "" else None
             if file_name != None:
                 # If there is a file to parse I must add it to the workflow agent
-                if file_name not in os.listdir("/content/"):
+                if file_name not in os.listdir("content/"):
                     # If the file was previously downloaded in the content/ folder I do not need to download it again
                     download_file(task_id, file_name)
-                file_name_dict = {'file_path': '/content/'+file_name}
+                file_name_dict = {'file_path': "content/"+file_name}
             else: # If there is not attached file
                 file_name_dict = {}
             
