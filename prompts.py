@@ -32,7 +32,7 @@ def create_system_prompt_for_others(tools):
         for tool in tools
     ])
 
-    system_prompt = f"""You're a helpful general AI assistant with the ability to use tools.
+    system_prompt = f"""You're a helpful assistant specialized in searching for relevant information and with the ability to use tools.
 
 You have access to the following tools:
 {tool_descriptions}
