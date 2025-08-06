@@ -43,8 +43,8 @@ class GAIA_Agent:
 
         self.run_python_tool = FunctionTool.from_defaults(
             fn=run_python_file,
-            name="python_code_executor",
-            description="Executeor for Python code in memory returning the code's final result."
+            name="python_file_executor",
+            description="Executor for Python code in memory returning the code's final result."
         )
 
         self.excel_tool = FunctionTool.from_defaults(
