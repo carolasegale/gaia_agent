@@ -24,7 +24,7 @@ class GAIA_Agent:
         self.calculator_tool = FunctionTool.from_defaults(
             fn=calculate,
             name="calculator",
-            description="A calculator that performs basic arithmetic operations (can be used also with basic expressions extrapolated from markdown tables)."
+            description="A calculator that performs basic arithmetic operations."
         )
 
         '''
@@ -38,19 +38,19 @@ class GAIA_Agent:
         self.audio_tool = FunctionTool.from_defaults(
             fn=lambda file_path: get_audio_transcript(file_path, model_whisper=self.model_whisper),
             name="audio_parser",
-            description="A simple transcript extractor for audio based on file."
+            description="A simple transcript extractor for audio based on file in memory."
         )
 
         self.run_python_tool = FunctionTool.from_defaults(
             fn=run_python_file,
             name="python_code_executor",
-            description="Executes Python code for a given .py file and returns the final printed result (do not create .py files to use this tool)."
+            description="Executeor for Python code in memory returning the code's final result."
         )
 
         self.excel_tool = FunctionTool.from_defaults(
             fn=get_info_from_excel,
             name="excel_parser",
-            description="A simple tool to extract information from an Excel file and trasform it into markdown text."
+            description="A simple tool to extract information from an Excel file in memory and trasform it into markdown table."
         )
 
         self.created_tools = [

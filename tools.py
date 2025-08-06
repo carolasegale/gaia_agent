@@ -54,6 +54,8 @@ def get_youtube_transcript(input: dict) -> dict:
 
 # audio tool
 def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
+    """Transcribe audio file and return the text."""
+
     if model_whisper is None:
         model_whisper = whisper.load_model("base")  # fallback, but shouldn't be used
     try:
@@ -64,7 +66,7 @@ def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
 
 # python file execution tool
 def run_python_file(file_path: str) -> dict:
-    """Safely runs a Python script and returns its final printed numeric output."""
+    """Runs a Python script in memory only and returns its final printed output."""
 
     try:        
         result = subprocess.run(
@@ -87,7 +89,7 @@ def run_python_file(file_path: str) -> dict:
 
 # Excel tool
 def get_info_from_excel(file_path: str) -> dict:
-    """Fetch information from an Excel file."""
+    """Fetch information from an Excel file and output it in markdown table."""
 
     try:
         df = pd.read_excel(file_path)
