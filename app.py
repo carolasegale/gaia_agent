@@ -9,7 +9,7 @@ from agent import GAIA_Agent
 from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.core.memory import Memory
 from llama_index.core import Document
-from utils import download_file
+from utils import download_file, download_youtube_video, extract_youtube_url
 from prompts import user_prompt_with_question
 import time
 
@@ -104,6 +104,12 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
                 file_name_dict = {'file_path': "content/"+file_name}
             else: # If there is not attached file
                 file_name_dict = {}
+
+            # DOWNLOAD YOUTUBE VIDEO
+            if 'youtube' in question_text:
+                url = extract_youtube_url(question_text)
+                video_name = download_youtube_video(url)
+                file_name_dict = {'file_path': "content/"+video_name}
             
             # RUN AGENT
             memory = Memory.from_defaults(

@@ -1,13 +1,16 @@
-from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent
+from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent, FunctionAgent
 import whisper
+from google import genai
 
 class GAIA_Agent:
-    def __init__(self, llm, tavily_api_key):
+    def __init__(self, llm, tavily_api_key, google_api_key):
         self.llm = llm
         self.tavily_api_key = tavily_api_key
+        self.google_api_key = google_api_key
         
         # Setup tools
         self.model_whisper = whisper.load_model("base")  # Load Whisper model once
+        self.client_vision = genai.Client(api_key=self.google_api_key)
         self._setup_tools()
 
         # Setup agents
@@ -16,7 +19,7 @@ class GAIA_Agent:
 
     def _setup_tools(self):
         from llama_index.core.tools import FunctionTool
-        from tools import calculate, run_python_file, get_info_from_excel, get_audio_transcript #, get_youtube_transcript
+        from tools import calculate, run_python_file, get_info_from_excel, get_audio_transcript, image_and_video_parser_tool #, get_youtube_transcript
         from llama_index.tools.wikipedia import WikipediaToolSpec
         from llama_index.tools.tavily_research.base import TavilyToolSpec
 
@@ -53,11 +56,14 @@ class GAIA_Agent:
             description="A simple tool to extract information from an Excel file in memory and trasform it into markdown table."
         )
 
+        self.image_and_video_tool = image_and_video_parser_tool(client_vision=self.client_vision)
+
         self.created_tools = [
             self.calculator_tool,
             self.audio_tool,
             self.run_python_tool,
-            self.excel_tool
+            self.excel_tool,
+            self.image_and_video_tool
         ] #youtube_tool
 
         self.wikipedia_tool_spec = WikipediaToolSpec()
@@ -68,7 +74,7 @@ class GAIA_Agent:
 
         self.multi_agent = ReActAgent(
             name='multi_functional_agent',
-            description="A general AI assistant that can use perform calculation, parse files, and execute code.",
+            description="A general AI assistant that can perform calculation, parse files, and execute code.",
             system_prompt=create_system_prompt_for_main_agent(self.created_tools),
             tools=self.created_tools,
             llm=self.llm,
@@ -76,7 +82,7 @@ class GAIA_Agent:
             can_handoff_to=['wikipedia_agent', 'search_agent']
         )
 
-        self.wiki_agent = ReActAgent(
+        self.wiki_agent = FunctionAgent(
             name='wikipedia_agent',
             description="A general AI assistant that can search Wikipedia for information.",
             system_prompt=create_system_prompt_for_others(self.wikipedia_tool_spec.to_tool_list()),
@@ -86,7 +92,7 @@ class GAIA_Agent:
             can_handoff_to=['multi_functional_agent', 'search_agent']
         )
 
-        self.search_agent = ReActAgent(
+        self.search_agent = FunctionAgent(
             name='search_agent',
             description="A general AI assistant that can search the web for information.",
             system_prompt=create_system_prompt_for_others(self.tavily_tool_spec.to_tool_list()),

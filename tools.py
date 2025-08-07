@@ -6,6 +6,9 @@ import numpy as np
 from llama_index.core import Document
 import whisper
 import subprocess
+import base64
+from PIL import Image
+from llama_index.core.tools import FunctionTool
 
 # calculator tool
 def calculate(input: dict) -> dict:
@@ -54,7 +57,7 @@ def get_youtube_transcript(input: dict) -> dict:
 
 # audio tool
 def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
-    """Transcribe audio file and return the text."""
+    """Transcribe audio file .mp3 or .mp4 and return the text."""
 
     if model_whisper is None:
         model_whisper = whisper.load_model("base")  # fallback, but shouldn't be used
@@ -66,7 +69,9 @@ def get_audio_transcript(file_path: str, model_whisper=None) -> dict:
 
 # python file execution tool
 def run_python_file(file_path: str) -> dict:
-    """Runs a Python script in memory only and returns its final printed output."""
+    """Runs a Python script in memory only and returns its final printed output. Takes as input:
+        file_path = "path/to/code.py"
+    """
 
     try:        
         result = subprocess.run(
@@ -98,4 +103,36 @@ def get_info_from_excel(file_path: str) -> dict:
         return {'result': document.text}
     except Exception as e:
         return {'error': f"Failed to fetch data from Excel: {str(e)}"}
+    
+# Image tool
+def image_and_video_parser_tool(client_vision):
+
+    def parse_image_or_video(input: dict) -> dict:
+        """
+        Tool wrapper that takes:
+        input = {
+            "file_path": "path/to/image_or_video, # image.png or video.mp4
+            "input": "your question"
+        }
+        """
+        file_path = input["file_path"]
+        query = input["input"]
+
+        try:
+            response = client_vision.models.generate_content(
+                model='gemini-2.5-pro',
+                contents=[
+                    query,
+                    Image.open(file_path)
+                ]
+            )
+            return {"result": response.text}
+        except Exception as e:
+            return {"error": str(e)}
+
+    return FunctionTool.from_defaults(
+        fn=parse_image_or_video,
+        name="image_and_video_parser",
+        description="Answer queries based on image or video content using Gemini 2.5 Vision."
+    )
 

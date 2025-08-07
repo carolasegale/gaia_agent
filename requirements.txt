@@ -9,3 +9,6 @@ llama-index-tools-tavily-research
 tabulate
 openai-whisper
 openpyxl
+google-genai
+pytube
+pytubefix
