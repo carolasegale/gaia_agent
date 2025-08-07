@@ -51,7 +51,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
     
     try:
         # DEFINE AGENT HERE
-        agent = GAIA_Agent(llm=llm, tavily_api_key=TVLY_TOKEN)
+        agent = GAIA_Agent(llm=llm, tavily_api_key=TVLY_TOKEN, google_api_key=GOOGLE_API_KEY)
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
