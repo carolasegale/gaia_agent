@@ -111,7 +111,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             if 'youtube' in question_text:
                 print('fetching youtube video')
                 url = extract_youtube_url(question_text)
-                video_name = url.split('v=')[-1]
+                video_name = url.split('v=')[-1]+'.mp4'
                 print(video_name)
                 file_name_dict = {'file_path': "content/"+video_name}
             
