@@ -118,12 +118,15 @@ def image_and_video_parser_tool(client_vision):
         file_path = input["file_path"]
         query = input["input"]
 
+        
+        myfile = client_vision.files.upload(file=file_path)
+
         try:
             response = client_vision.models.generate_content(
                 model='gemini-2.5-pro',
                 contents=[
+                    myfile,
                     query,
-                    Image.open(file_path)
                 ]
             )
             return {"result": response.text}

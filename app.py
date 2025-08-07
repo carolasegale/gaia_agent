@@ -99,6 +99,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             if file_name != "":
                 # If there is a file to parse I must add it to the workflow agent
                 if file_name not in os.listdir("content/"):
+                    print('downloading attached file')
                     # If the file was previously downloaded in the content/ folder I do not need to download it again
                     download_file(task_id, file_name)
                 file_name_dict = {'file_path': "content/"+file_name}
@@ -107,10 +108,12 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
 
             # DOWNLOAD YOUTUBE VIDEO
             if 'youtube' in question_text:
+                print('downloading youtube video')
                 url = extract_youtube_url(question_text)
                 video_name = download_youtube_video(url)
                 file_name_dict = {'file_path': "content/"+video_name}
             
+            print(file_name_dict)
             # RUN AGENT
             memory = Memory.from_defaults(
                 token_limit=60000  # 80000
@@ -119,7 +122,7 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
             agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
             #agent_answer = await agent.get_answer_with_stream(prompt, file_name_dict, memory)
             submitted_answer = agent_answer.response.blocks[0].text
-            print(question_text, '', submitted_answer)
+            print('\n', question_text, '', submitted_answer)
             # ----------------------------------------------------------------------------------------------------------------
             
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})

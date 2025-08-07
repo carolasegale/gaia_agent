@@ -82,7 +82,7 @@ class GAIA_Agent:
             can_handoff_to=['wikipedia_agent', 'search_agent']
         )
 
-        self.wiki_agent = FunctionAgent(
+        self.wiki_agent = ReActAgent(
             name='wikipedia_agent',
             description="A general AI assistant that can search Wikipedia for information.",
             system_prompt=create_system_prompt_for_others(self.wikipedia_tool_spec.to_tool_list()),
@@ -92,7 +92,7 @@ class GAIA_Agent:
             can_handoff_to=['multi_functional_agent', 'search_agent']
         )
 
-        self.search_agent = FunctionAgent(
+        self.search_agent = ReActAgent(
             name='search_agent',
             description="A general AI assistant that can search the web for information.",
             system_prompt=create_system_prompt_for_others(self.tavily_tool_spec.to_tool_list()),
