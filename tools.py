@@ -107,18 +107,13 @@ def get_info_from_excel(file_path: str) -> dict:
 # Image tool
 def image_and_video_parser_tool(client_vision):
 
-    def parse_image_or_video(input: dict) -> dict:
+    def parse_image_or_video(file_path: str, query: str) -> dict:
         """
-        Tool wrapper that takes:
-        input = {
-            "file_path": "path/to/image_or_video, # image.png or video.mp4
-            "input": "your question"
-        }
+        Tool wrapper that takes as input:
+        file_path: "path/to/image_or_video # image.png or video.mp4
+        query: "the question about the image or video"
         """
-        file_path = input["file_path"]
-        query = input["input"]
 
-        
         myfile = client_vision.files.upload(file=file_path)
 
         try:
