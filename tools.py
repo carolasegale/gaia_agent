@@ -109,10 +109,11 @@ def image_and_video_parser_tool(client_vision):
 
     def parse_image_or_video(input: dict) -> dict:
         """
-        Tool wrapper that takes:
-        input = {
-            "file_path": "path/to/image_or_video, # image.png or video.mp4
-            "input": "your question"
+        Parse images and videos stored in memory. Takes as input:
+        input = {"input": {
+          "file_path": "path/to/image_or_video", # image.png or video.mp4
+          "question": "your question"
+          }
         }
         """
         file_path = input['input']['file_path'] #input["file_path"]
@@ -136,6 +137,30 @@ def image_and_video_parser_tool(client_vision):
     return FunctionTool.from_defaults(
         fn=parse_image_or_video,
         name="image_and_video_parser",
-        description="Answer queries based on image or video content using Gemini 2.5 Vision."
+        description="Answer queries based on image or video stored in memory."
     )
 
+def parse_image_or_video(file_path: str, client_vision) -> dict:
+    """Parse images and videos stored in memory"""
+    
+    img_or_video = "image" if '.png' in file_path else "video"
+
+    query = f"Accurately describe what the following {img_or_video} shows."
+    if img_or_video == 'video':
+      query += " Transcribe the audio as well."
+    query += " Be meticulous."
+    
+    myfile = client_vision.files.upload(file=file_path)
+    print(myfile)
+
+    try: 
+        response = client_vision.models.generate_content(
+            model='gemini-2.5-pro',
+            contents=[
+                query,
+                myfile
+            ]
+        )
+        return {"result": response.text}
+    except Exception as e:
+            return {"error": str(e)}

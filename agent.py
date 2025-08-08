@@ -19,7 +19,7 @@ class GAIA_Agent:
 
     def _setup_tools(self):
         from llama_index.core.tools import FunctionTool
-        from tools import calculate, run_python_file, get_info_from_excel, get_audio_transcript, image_and_video_parser_tool #, get_youtube_transcript
+        from tools import calculate, run_python_file, get_info_from_excel, get_audio_transcript, image_and_video_parser_tool, parse_image_or_video #, get_youtube_transcript
         from llama_index.tools.wikipedia import WikipediaToolSpec
         from llama_index.tools.tavily_research.base import TavilyToolSpec
 
@@ -56,7 +56,12 @@ class GAIA_Agent:
             description="A simple tool to extract information from an Excel file in memory and trasform it into markdown table."
         )
 
-        self.image_and_video_tool = image_and_video_parser_tool(client_vision=self.client_vision)
+        #self.image_and_video_tool = image_and_video_parser_tool(client_vision=self.client_vision)
+        self.image_and_video_tool = FunctionTool.from_defaults(
+            fn=lambda file_path: parse_image_or_video(file_path, client_vision=self.client_vision),
+            name="image_and_video_parser",
+            description="Answer queries based on image or video stored in memory."
+        )
 
         self.created_tools = [
             self.calculator_tool,
