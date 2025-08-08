@@ -120,8 +120,8 @@ async def run_and_submit_all( profile: gr.OAuthProfile | None):
                 token_limit=60000  # 80000
             )
             prompt = user_prompt_with_question(question_text)
-            agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
-            #agent_answer = await agent.get_answer_with_stream(prompt, file_name_dict, memory)
+            #agent_answer = await agent.get_answer(prompt, file_name_dict, memory)
+            agent_answer = await agent.get_answer_with_stream(prompt, file_name_dict, memory)
             submitted_answer = agent_answer.response.blocks[0].text
             print('\n', question_text, '', submitted_answer)
             # ----------------------------------------------------------------------------------------------------------------
